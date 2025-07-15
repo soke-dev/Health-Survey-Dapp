@@ -1,0 +1,2 @@
+export const CONTRACT_ADDRESS = "0x6861b0253B4742881126c151Ab57912b5FD0b4F8"; // Replace
+export const CHAIN_ID = 11155111; // Sepolia
