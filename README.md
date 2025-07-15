@@ -1,46 +1,37 @@
-# Getting Started with Create React App
+### 🔐 **Project Title**: Private Health Survey using FHEVM (Zama FHE)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### 🧠 **Overview**:
 
-## Available Scripts
+This project is a decentralized survey dApp that leverages Fully Homomorphic Encryption (FHE) via Zama’s FHEVM to securely collect and store private health data (e.g., age and fever status) on-chain without exposing users' raw inputs.
 
-In the project directory, you can run:
+### ⚙️ **How it Works**:
 
-### `npm start`
+1. **Frontend (React + ethers.js + Zama SDK)**:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+   * Users connect their MetaMask wallet.
+   * They enter their age and whether they have a fever.
+   * These inputs are encrypted in the browser using Zama’s Relayer SDK and then submitted to a smart contract.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+2. **Smart Contract (Solidity + FHEVM)**:
 
-### `npm test`
+   * The contract receives the encrypted values (as `externalEuint8` and `externalEbool`) along with proofs.
+   * It uses `FHE.fromExternal()` to verify and convert them to internal encrypted types.
+   * Encrypted values are stored in a mapping per user.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. **Decryption**:
 
-### `npm run build`
+   * Only the user who submitted the data can decrypt it client-side using the SDK, ensuring privacy is maintained even when reading from the blockchain.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 📦 **Stack**:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+* Smart Contract: Solidity with `@fhevm/solidity`
+* Frontend: React + ethers.js
+* Zama FHE Relayer SDK
+* Blockchain: FHE-compatible Sepolia Testnet
+* Tools: MetaMask, CRACO, TypeScript
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 🧪 **Current Issues (in-progress)**:
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+* Submitting encrypted data sometimes results in failed transactions.
+* Decryption errors occur if FHE instance is misused or not initialized correctly.
+* Call exceptions hint at incorrect usage of ciphertext handles or malformed proofs.
